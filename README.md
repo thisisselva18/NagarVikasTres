@@ -111,6 +111,7 @@ For help getting started with Flutter development, view the [online documentatio
 *Prateek Chourasia*  
 📧 prateekchourasia9876@gmail.com  
 linkedin - https://www.linkedin.com/in/prateek-chourasia-in
+
 🌐 [GitHub Profile](https://github.com/Prateek9876)
 
 ---
