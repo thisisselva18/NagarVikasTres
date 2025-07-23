@@ -100,10 +100,10 @@ class _LogoWidgetState extends State<LogoWidget>
                         speed: Duration(milliseconds: 100),
                       ),
                       TypewriterAnimatedText(
-                        'Created By Fate.\nEngineered By Prateek Chourasia',
+                        'Welcome to the Wizarding World 🧙\nEngineered By Prateek Chourasia',
                         textStyle: GoogleFonts.nunito(
                           fontSize: 15,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w600,
                           color: Colors.grey[800],
                         ),
                         textAlign: TextAlign.center,
@@ -127,10 +127,11 @@ class _LogoWidgetState extends State<LogoWidget>
                 ),
                 SizedBox(height: 15),
                 Text(
-                  "Redirecting...",
+                  "Redirecting to Ministry of Complaints... 🧙‍♂️",
                   style: GoogleFonts.nunito(
                     fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                    
+                    fontWeight: FontWeight.w600,
                     color: Colors.grey[700],
                   ),
                 ),

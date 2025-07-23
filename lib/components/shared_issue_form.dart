@@ -384,7 +384,7 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
 
             DropdownButtonFormField<String>(
               value: _selectedState,
-              hint: const Text("Select State"),
+              hint: const Text("Select the Wizarding Region"),
               items: _states.keys
                   .map((s) => DropdownMenuItem(value: s, child: Text(s)))
                   .toList(),
@@ -397,7 +397,7 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
             const SizedBox(height: 10),
             DropdownButtonFormField<String>(
               value: _selectedCity,
-              hint: const Text("Select City"),
+              hint: const Text("Select the Nearest Magical District"),
               items: _selectedState != null
                   ? _states[_selectedState]!
                       .map((city) =>
@@ -412,7 +412,7 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
             TextField(
               controller: _locationController,
               decoration:
-                  _inputDecoration("Enter location manually or use icon")
+                  _inputDecoration("Reveal the Secret Location")
                       .copyWith(
                 suffixIcon: IconButton(
                     icon: const Icon(Icons.my_location),
@@ -430,7 +430,7 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
                       maxLength}) =>
                   null,
               decoration:
-                  _inputDecoration("Enter description or use mic").copyWith(
+                  _inputDecoration("Describe the Strange Occurence or Speak a spell").copyWith(
                 suffixIcon: IconButton(
                   icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
                   onPressed: _isListening ? _stopListening : _startListening,
@@ -465,7 +465,7 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
             ),
             const SizedBox(height: 12),
             // Upload Image button
-            _buildUploadButton("Upload Image", Icons.image,
+            _buildUploadButton("Reveal a Magical Proof 📷", Icons.image,
                 _selectedImage != null, _pickImage),
             const SizedBox(height: 8),
 
@@ -577,7 +577,7 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
                 ),
                 child: _isUploading
                     ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text("Submit",
+                    : const Text("Send via Owl Post",
                         style: TextStyle(fontSize: 16, color: Colors.white)),
               ),
             ),

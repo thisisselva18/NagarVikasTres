@@ -74,8 +74,8 @@ class NotificationService {
 
     await _flutterLocalNotificationsPlugin.show(
       0,
-      'Complaint Submitted Successfully!',
-      'Your $issueType complaint has been submitted and is being reviewed.',
+      'Ministry Has Received Your Alert! 🦉',
+      'Your owl-delivered $issueType complaint is being reviewed by the Department of Magical Maintenance.',
       platformChannelSpecifics,
       payload: complaintId ?? 'complaint_submitted',
     );
@@ -110,7 +110,7 @@ class NotificationService {
 
     await _flutterLocalNotificationsPlugin.show(
       1,
-      'Submission Failed ❌',
+      '🦉 Owl Lost Mid Flight!',
       'Failed to submit your $issueType complaint. Please try again.',
       platformChannelSpecifics,
       payload: 'submission_failed',

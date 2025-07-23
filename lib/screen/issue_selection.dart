@@ -192,9 +192,9 @@ class _IssueSelectionPageState extends State<IssueSelectionPage> {
         title: FadeInDown(
           duration: Duration(milliseconds: 1000),
           child: Text(
-            t('title'),
+            t('Select the nuisance you wish to vanish 🪄'),
             style: const TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w900),
+                color: Colors.black, fontSize: 16, fontWeight: FontWeight.w900),
           ),
         ),
         centerTitle: true,
@@ -324,7 +324,7 @@ class _IssueSelectionPageState extends State<IssueSelectionPage> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  t('processing'),
+                  t('Calling... \nThe Ministry of Magic 🔮'),
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
                 ),
@@ -439,7 +439,7 @@ class _AppDrawerState extends State<AppDrawer> {
               // Drawer Items (localized)
               buildDrawerItem(
                   context, Icons.person, widget.t('profile'), ProfilePage()),
-              buildDrawerItem(context, Icons.history, widget.t('my_complaints'),
+              buildDrawerItem(context, Icons.history, widget.t('Spell Records'),
                   MyComplaintsScreen()),
               buildDrawerItem(context, Icons.favorite,
                   widget.t('user_feedback'), FeedbackPage()),

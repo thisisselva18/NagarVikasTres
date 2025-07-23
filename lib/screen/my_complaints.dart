@@ -239,7 +239,7 @@ class _MyComplaintsScreenState extends State<MyComplaintsScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 253, 254, 254),
       appBar: AppBar(
-        title: Text("My Complaints"),
+        title: Text("Spell Records"),
         backgroundColor: const Color.fromARGB(255, 4, 204, 240),
       ),
       body: _isLoading
