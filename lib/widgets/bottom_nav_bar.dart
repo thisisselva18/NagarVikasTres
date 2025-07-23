@@ -69,7 +69,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 ),
                 GButton(
                   icon: CupertinoIcons.doc_text,
-                  text: 'My Complaints',
+                  text: 'Spell Records',
                 ),
                 GButton(
                   icon: CupertinoIcons.info_circle,
