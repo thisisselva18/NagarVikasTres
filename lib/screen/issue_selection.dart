@@ -113,7 +113,74 @@ class _IssueSelectionPageState extends State<IssueSelectionPage> {
     // Save FCM Token to Firebase if user is logged in, and request notification permission if not already granted.
     getTokenAndSave();
     requestNotificationPermission();
+
+    _showTermsAndConditionsDialogIfNeeded();
   }
+  void _showTermsAndConditionsDialogIfNeeded() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool hasAccepted = prefs.getBool('hasAcceptedTerms') ?? false;
+
+    if (!hasAccepted) {
+      await Future.delayed(Duration(milliseconds: 300));
+
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text(
+              "Terms & Conditions",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    "By using this app, you agree to the following terms:\n",
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  Text("• Report issues truthfully and accurately."),
+                  Text("• Consent to receive notifications from the app."),
+                  Text("• Do not misuse the platform for false complaints."),
+                  Text("• Data may be used to improve services."),
+                  SizedBox(height: 10),
+                  Text(
+                    "If you agree, tap **Accept** to proceed.",
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Decline"),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () async {
+                  await prefs.setBool('hasAcceptedTerms', true);
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Accept"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
 
   // Requesting Firebase Messaging notification permissions
   void requestNotificationPermission() async {
