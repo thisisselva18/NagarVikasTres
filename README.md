@@ -1,9 +1,13 @@
 # 🏙 NagarVikas
 
 *NagarVikas* is a smart complaint management app built with Flutter and Firebase. It allows citizens to raise civic issues in their locality while enabling government authorities to track, manage, and resolve them efficiently.
+
+
 🌟💥
 As a citizen of india, each and every citizen faces a civic issues whether it is broken streetlights or not working, no water supply, drainage system failure, stray animals issue, road damage, etc. and there was no app or website or even a phone number to which we can call and file a complaint about this. 
 From here the idea to build NagarVikas rose, citizens can files the type of issue they are facing and in realtime admin gets those complaints ➡️ checks every information giving by user ➡️ marks the status as in progress if complaint seem valid ➡️ admin or municipal authorities work on that issue ➡️ Status to be marked as resolved when issue is been solved.
+
+
 🌟💥
 Admin also has analytics dashboard where total complaints , pending complaints , in progress and resolved complaints are shown so that authorities can track how many complaints submitted last month or week or year. 
 
