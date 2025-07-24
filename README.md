@@ -1,3 +1,7 @@
+OWNER OF THIS APP -- PRATEEK CHOURASIA
+
+Email- prateekchourasia9876@gmail.com
+
 # 🏙 NagarVikas
 
 *NagarVikas* is a smart complaint management app built with Flutter and Firebase. It allows citizens to raise civic issues in their locality while enabling government authorities to track, manage, and resolve them efficiently.
