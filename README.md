@@ -1,5 +1,5 @@
 OWNER OF THIS APP -- PRATEEK CHOURASIA
-
+FOUNDER OF - NextGen Software Labs.
 Email- prateekchourasia9876@gmail.com
 
 # 🏙 NagarVikas
