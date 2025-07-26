@@ -56,14 +56,14 @@ class _LoginPageState extends State<LoginPage> {
       // ✅ Check if email is verified
       if (user != null && !user.emailVerified) {
         Fluttertoast.showToast(
-            msg: "You need to verify your email before logging in.\n\n"
-        "Please check your inbox (and spam folder) for the verification email.",
+            msg: "You need to verify your email before logging in.\n"
+        "Please check your Inbox/Spam folder.",
             toastLength: Toast.LENGTH_LONG, // For longer duration
             timeInSecForIosWeb: 3,          // Works on iOS/Web
             gravity: ToastGravity.BOTTOM,   // Position
-            backgroundColor: Colors.green,  // Optional styling
+            backgroundColor: const Color.fromARGB(255, 4, 4, 4),  // Optional styling
             textColor: Colors.white,        // Optional styling
-            fontSize: 16.0,                 // Optional
+            fontSize: 14.0,                 // Optional
         );
         await _auth.signOut();
         setState(() => isLoading = false);
