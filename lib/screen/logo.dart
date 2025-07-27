@@ -92,7 +92,7 @@ class LogoWidgetState extends State<LogoWidget>
                   AnimatedTextKit(
                     animatedTexts: [
                       TypewriterAnimatedText(
-                        'nagarvikas',
+                        'NagarVikas',
                         textStyle: GoogleFonts.nunito(
                           fontSize: 35,
                           fontWeight: FontWeight.bold,

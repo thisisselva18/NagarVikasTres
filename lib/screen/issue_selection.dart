@@ -459,7 +459,7 @@ class AppDrawerState extends State<AppDrawer> {
               const DrawerHeader(
                 decoration:
                     BoxDecoration(color: Color.fromARGB(255, 4, 204, 240)),
-                child: Text("nagarvikas",
+                child: Text("NagarVikas",
                     style: TextStyle(fontSize: 24, color: Colors.black)),
               ),
               // Language Switcher

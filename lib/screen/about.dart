@@ -15,8 +15,8 @@ class AboutAppPage extends StatelessWidget {
         child: ListView(
           children: [
             _buildQuestionTile(
-              'What is nagarvikas?',
-              'nagarvikas is a civic issue complaint application designed to bridge the gap between citizens and municipal authorities. It allows citizens to easily report and track the resolution of civic issues like garbage disposal, potholes, water supply issues, and more.',
+              'What is NagarVikas?',
+              'NagarVikas is a civic issue complaint application designed to bridge the gap between citizens and municipal authorities. It allows citizens to easily report and track the resolution of civic issues like garbage disposal, potholes, water supply issues, and more.',
             ),
             _buildQuestionTile(
               'What do we do?',
@@ -27,11 +27,11 @@ class AboutAppPage extends StatelessWidget {
               'Our app offers a variety of services, including issue reporting, live status tracking, and automated notifications. You can submit complaints about various civic problems, track the progress, and receive updates on the resolution.',
             ),
             _buildQuestionTile(
-              'What are the features of nagarvikas?',
+              'What are the features of NagarVikas?',
               '• Easy complaint submission\n• Track complaint status in real time\n• Notifications and reminders for pending issues\n• User-friendly interface\n• Fast and reliable issue resolution system',
             ),
             _buildQuestionTile(
-              'Who developed nagarvikas?',
+              'Who developed NagarVikas?',
               'nagarvikas was developed by a passionate team aiming to improve civic engagement and urban infrastructure. We believe technology can solve problems more efficiently and make a positive impact on the community.',
             ),
             _buildQuestionTile(
