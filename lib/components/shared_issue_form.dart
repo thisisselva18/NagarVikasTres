@@ -1,9 +1,7 @@
 // lib/widgets/shared_issue_form.dart
 
 import 'dart:io';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:NagarVikas/service/notification_service.dart';
+import 'package:nagarvikas/service/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:geocoding/geocoding.dart';
@@ -120,7 +118,6 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
     'West Bengal': ['Kolkata', 'Howrah', 'Durgapur', 'Siliguri', 'Asansol'],
   };
 
-
   @override
   void initState() {
     super.initState();
@@ -165,6 +162,7 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
 
     try {
       Position position = await Geolocator.getCurrentPosition(
+          // ignore: deprecated_member_use
           desiredAccuracy: LocationAccuracy.high);
       final placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
@@ -215,16 +213,16 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
       Fluttertoast.showToast(msg: "Remove the video to upload image.");
       return;
     }
-  
-      final pickedFile =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
 
-      if (pickedFile != null) {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
       setState(() {
         _selectedImage = File(pickedFile.path);
       });
-      
-      }}
+    }
+  }
 
   Future<void> _pickVideo() async {
     if (_selectedImage != null) {
@@ -329,9 +327,10 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
       );
 
       Fluttertoast.showToast(msg: "Submitted Successfully");
-
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const DoneScreen()));
+      if (mounted) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (_) => const DoneScreen()));
+      }
     } catch (e) {
       Fluttertoast.showToast(msg: "Submission failed: $e");
 
@@ -351,18 +350,22 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
     super.dispose();
   }
 
-  InputDecoration _inputDecoration(String hint, {required bool isFilled}) => InputDecoration(
+  InputDecoration _inputDecoration(String hint, {required bool isFilled}) =>
+      InputDecoration(
         hintText: hint,
         filled: true,
         fillColor: const Color.fromARGB(255, 251, 250, 250),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: isFilled ? Colors.grey[400]! : Colors.red, width: 1),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+              color: isFilled ? Colors.grey[400]! : Colors.red, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: isFilled ? Colors.blue : Colors.red, width: 2),
+          borderRadius: BorderRadius.circular(8),
+          borderSide:
+              BorderSide(color: isFilled ? Colors.blue : Colors.red, width: 2),
         ),
       );
 
@@ -399,7 +402,8 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
                 _selectedState = value;
                 _selectedCity = null;
               }),
-              decoration: _inputDecoration("State", isFilled: _selectedState != null),
+              decoration:
+                  _inputDecoration("State", isFilled: _selectedState != null),
             ),
             const SizedBox(height: 10),
             DropdownButtonFormField<String>(
@@ -412,15 +416,16 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
                       .toList()
                   : [],
               onChanged: (value) => setState(() => _selectedCity = value),
-              decoration: _inputDecoration("City", isFilled: _selectedCity != null),
+              decoration:
+                  _inputDecoration("City", isFilled: _selectedCity != null),
             ),
             const SizedBox(height: 10),
 
             TextField(
               controller: _locationController,
-              decoration:
-                  _inputDecoration("Reveal the Secret Location", isFilled: _locationController.text.trim().isNotEmpty)
-                      .copyWith(
+              decoration: _inputDecoration("Reveal the Secret Location",
+                      isFilled: _locationController.text.trim().isNotEmpty)
+                  .copyWith(
                 suffixIcon: IconButton(
                     icon: const Icon(Icons.my_location),
                     onPressed: _getCurrentLocation),
@@ -436,8 +441,10 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
                       required isFocused,
                       maxLength}) =>
                   null,
-              decoration:
-                  _inputDecoration("Describe the Strange Occurence or Speak a spell", isFilled: _descriptionController.text.trim().isNotEmpty).copyWith(
+              decoration: _inputDecoration(
+                      "Describe the Strange Occurence or Speak a spell",
+                      isFilled: _descriptionController.text.trim().isNotEmpty)
+                  .copyWith(
                 suffixIcon: IconButton(
                   icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
                   onPressed: _isListening ? _stopListening : _startListening,
