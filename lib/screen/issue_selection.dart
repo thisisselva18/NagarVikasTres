@@ -8,6 +8,7 @@ import 'package:nagarvikas/screen/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../widgets/chatbot_wrapper.dart';
 import 'garbage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -247,86 +248,88 @@ class IssueSelectionPageState extends State<IssueSelectionPage> {
   // Building the main issue selection grid with animated cards
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 253, 253, 253),
-      drawer: AppDrawer(
-        language: _language,
-        onLanguageChanged: (lang) {
-          setState(() {
-            _language = lang;
-          });
-        },
-        t: t,
-      ),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: FadeInDown(
-          duration: Duration(milliseconds: 1000),
-          child: Text(
-            t('Select the nuisance you wish to vanish 🪄'),
-            style: const TextStyle(
-                color: Colors.black, fontSize: 16, fontWeight: FontWeight.w900),
+    return ChatbotWrapper(
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 253, 253, 253),
+        drawer: AppDrawer(
+          language: _language,
+          onLanguageChanged: (lang) {
+            setState(() {
+              _language = lang;
+            });
+          },
+          t: t,
+        ),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: FadeInDown(
+            duration: Duration(milliseconds: 1000),
+            child: Text(
+              t('Select the nuisance you wish to vanish 🪄'),
+              style: const TextStyle(
+                  color: Colors.black, fontSize: 16, fontWeight: FontWeight.w900),
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                  children: [
+                    // Each issue card has a ZoomIn animation for better user experience and smooth UI.
+                    ZoomIn(
+                        delay: Duration(milliseconds: 200),
+                        child: buildIssueCard(context, t('garbage'),
+                            "assets/garbage.png", const GarbagePage())),
+                    ZoomIn(
+                        delay: Duration(milliseconds: 400),
+                        child: buildIssueCard(context, t('water'),
+                            "assets/water.png", const WaterPage())),
+                    ZoomIn(
+                        delay: Duration(milliseconds: 600),
+                        child: buildIssueCard(context, t('road'),
+                            "assets/road.png", const RoadPage())),
+                    ZoomIn(
+                        delay: Duration(milliseconds: 800),
+                        child: buildIssueCard(context, t('streetlight'),
+                            "assets/streetlight.png", const StreetLightPage())),
+                    ZoomIn(
+                        delay: Duration(milliseconds: 1000),
+                        child: buildIssueCard(context, t('animals'),
+                            "assets/animals.png", const AnimalsPage())),
+                    ZoomIn(
+                        delay: Duration(milliseconds: 1200),
+                        child: buildIssueCard(context, t('drainage'),
+                            "assets/drainage.png", const DrainagePage())),
+                    ZoomIn(
+                        delay: Duration(milliseconds: 1400),
+                        child: buildIssueCard(context, t('other'),
+                            "assets/newentry.png", const NewEntryPage())),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
-                children: [
-                  // Each issue card has a ZoomIn animation for better user experience and smooth UI.
-                  ZoomIn(
-                      delay: Duration(milliseconds: 200),
-                      child: buildIssueCard(context, t('garbage'),
-                          "assets/garbage.png", const GarbagePage())),
-                  ZoomIn(
-                      delay: Duration(milliseconds: 400),
-                      child: buildIssueCard(context, t('water'),
-                          "assets/water.png", const WaterPage())),
-                  ZoomIn(
-                      delay: Duration(milliseconds: 600),
-                      child: buildIssueCard(context, t('road'),
-                          "assets/road.png", const RoadPage())),
-                  ZoomIn(
-                      delay: Duration(milliseconds: 800),
-                      child: buildIssueCard(context, t('streetlight'),
-                          "assets/streetlight.png", const StreetLightPage())),
-                  ZoomIn(
-                      delay: Duration(milliseconds: 1000),
-                      child: buildIssueCard(context, t('animals'),
-                          "assets/animals.png", const AnimalsPage())),
-                  ZoomIn(
-                      delay: Duration(milliseconds: 1200),
-                      child: buildIssueCard(context, t('drainage'),
-                          "assets/drainage.png", const DrainagePage())),
-                  ZoomIn(
-                      delay: Duration(milliseconds: 1400),
-                      child: buildIssueCard(context, t('other'),
-                          "assets/newentry.png", const NewEntryPage())),
-                ],
-              ),
-            ),
-          ],
+        // Floating Action Button to navigate to the Discussion Forum screen.
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: const Color.fromARGB(255, 7, 7, 7),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DiscussionForum()),
+            );
+          },
+          child: const Icon(Icons.forum, color: Colors.white),
         ),
-      ),
-      // Floating Action Button to navigate to the Discussion Forum screen.
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(255, 7, 7, 7),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DiscussionForum()),
-          );
-        },
-        child: const Icon(Icons.forum, color: Colors.white),
       ),
     );
   }
@@ -423,15 +426,16 @@ class AppDrawer extends StatefulWidget {
   final String Function(String) t;
   const AppDrawer(
       {super.key,
-      required this.language,
-      required this.onLanguageChanged,
-      required this.t});
-
+        required this.language,
+        required this.onLanguageChanged,
+        required this.t});
+//sidebar enhanced
   @override
-  AppDrawerState createState() => AppDrawerState();
+  _AppDrawerState createState() => _AppDrawerState();
 }
+// work done
 
-class AppDrawerState extends State<AppDrawer> {
+class _AppDrawerState extends State<AppDrawer> {
   String _appVersion = "Loading...";
 
   @override
@@ -451,186 +455,218 @@ class AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView(children: [
-              // App title
-              const DrawerHeader(
-                decoration:
-                    BoxDecoration(color: Color.fromARGB(255, 4, 204, 240)),
-                child: Text("NagarVikas",
-                    style: TextStyle(fontSize: 24, color: Colors.black)),
-              ),
-              // Language Switcher
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.language, color: Colors.black),
-                    SizedBox(width: 8),
-                    Text("Language:",
-                        style: TextStyle(fontSize: 15, color: Colors.black)),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            ChoiceChip(
-                              label: Text('English',
-                                  style: TextStyle(fontSize: 13)),
-                              selected: widget.language == 'en',
-                              onSelected: (selected) {
-                                if (selected) widget.onLanguageChanged('en');
-                              },
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 2),
-                              visualDensity: VisualDensity.compact,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.horizontal(right: Radius.circular(24)),
+      ),
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(children: [
+                // App title with icon and "Made with ❤️ by Prateek Chourasia"
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Color(0xFFE0F7FA),
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/app_icon.png',
+                            width: 38,
+                            height: 38,
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            "NagarVikas",
+                            style: TextStyle(
+                              fontSize: 26,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.2,
                             ),
-                            SizedBox(width: 6),
-                            ChoiceChip(
-                              label: Text('हिन्दी',
-                                  style: TextStyle(fontSize: 13)),
-                              selected: widget.language == 'hi',
-                              onSelected: (selected) {
-                                if (selected) widget.onLanguageChanged('hi');
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Made with ❤️ by Prateek Chourasia',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Language Switcher
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.language, color: Colors.black87),
+                      SizedBox(width: 8),
+                      Text("Language:", style: TextStyle(fontSize: 15, color: Colors.black87)),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              ChoiceChip(
+                                label: Text('English', style: TextStyle(fontSize: 13)),
+                                selected: widget.language == 'en',
+                                onSelected: (selected) {
+                                  if (selected) widget.onLanguageChanged('en');
+                                },
+                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                visualDensity: VisualDensity.compact,
+                                selectedColor: Color(0xFFE0F7FA),
+                                backgroundColor: Color(0xFFF5F5F5),
+                                labelStyle: TextStyle(color: widget.language == 'en' ? Colors.teal : Colors.black87),
+                              ),
+                              SizedBox(width: 6),
+                              ChoiceChip(
+                                label: Text('हिन्दी', style: TextStyle(fontSize: 13)),
+                                selected: widget.language == 'hi',
+                                onSelected: (selected) {
+                                  if (selected) widget.onLanguageChanged('hi');
+                                },
+                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                visualDensity: VisualDensity.compact,
+                                selectedColor: Color(0xFFE0F7FA),
+                                backgroundColor: Color(0xFFF5F5F5),
+                                labelStyle: TextStyle(color: widget.language == 'hi' ? Colors.teal : Colors.black87),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Drawer Items (localized)
+                ...[
+                  buildDrawerItem(
+                      context, Icons.person, widget.t('profile'), ProfilePage()),
+                  buildDrawerItem(context, Icons.history, widget.t('Spell Records'), MyComplaintsScreen()),
+                  buildDrawerItem(context, Icons.favorite, widget.t('user_feedback'), FeedbackPage()),
+                  buildDrawerItem(context, Icons.card_giftcard, widget.t('refer_earn'), ReferAndEarnPage()),
+                  buildDrawerItem(context, Icons.report_problem, widget.t('facing_issues'), FacingIssuesPage()),
+                  buildDrawerItem(context, Icons.info, widget.t('about'), AboutAppPage()),
+                  buildDrawerItem(context, Icons.headset_mic, widget.t('contact'), ContactUsPage()),
+                  buildDrawerItem(
+                    context,
+                    Icons.share,
+                    widget.t('share_app'),
+                    null,
+                    onTap: () {
+                      Share.share(
+                        'Check out this app: https://github.com/Prateek9876/NagarVikas',
+                        subject: 'NagarVikas App',
+                      );
+                    },
+                  ),
+                  buildDrawerItem(
+                    context,
+                    Icons.games,
+                    '2048 Game',
+                    null,
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => const FunGameScreen()));
+                    },
+                  ),
+                  buildDrawerItem(
+                    context,
+                    Icons.logout,
+                    widget.t('logout'),
+                    null,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(widget.t('logout_title')),
+                          content: Text(widget.t('logout_content')),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text(widget.t('cancel')),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                final FirebaseAuth auth = FirebaseAuth.instance;
+                                await auth.signOut();
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const LoginPage()));
                               },
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 2),
-                              visualDensity: VisualDensity.compact,
+                              child: Text(widget.t('yes')),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                  ],
+                      );
+                    },
+                  ),
+                ].map((item) => Container(
+                  margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: item,
+                )).toList(),
+                const Divider(color: Color(0xFFE0F7FA), thickness: 1),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 15),
+                  child: Text(
+                    widget.t('follow_us'),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
                 ),
-              ),
-              // Drawer Items (localized)
-              buildDrawerItem(
-                  context, Icons.person, widget.t('profile'), ProfilePage()),
-              buildDrawerItem(context, Icons.history, widget.t('Spell Records'),
-                  MyComplaintsScreen()),
-              buildDrawerItem(context, Icons.favorite,
-                  widget.t('user_feedback'), FeedbackPage()),
-              buildDrawerItem(context, Icons.card_giftcard,
-                  widget.t('refer_earn'), ReferAndEarnPage()),
-              buildDrawerItem(context, Icons.report_problem,
-                  widget.t('facing_issues'), FacingIssuesPage()),
-              buildDrawerItem(
-                  context, Icons.info, widget.t('about'), AboutAppPage()),
-              buildDrawerItem(context, Icons.headset_mic, widget.t('contact'),
-                  ContactUsPage()),
-              buildDrawerItem(
-                context,
-                Icons.share,
-                widget.t('share_app'),
-                null,
-                onTap: () {
-                  // Share.share(
-                  //   'Check out this app: https://github.com/Prateek9876/nagarvikas',
-                  //   subject: 'NagarVikas App',
-                  // ); // Deprecated
-                  SharePlus.instance.share(ShareParams(
-                    text:
-                        'Check out this app: https://github.com/Prateek9876/nagarvikas',
-                    subject: 'NagarVikas App',
-                  ));
-                },
-              ),
-              buildDrawerItem(
-                context,
-                Icons.games,
-                '2048 Game',
-                null,
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const FunGameScreen()));
-                },
-              ),
-              buildDrawerItem(
-                context,
-                Icons.logout,
-                widget.t('logout'),
-                null,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(widget.t('logout_title')),
-                      content: Text(widget.t('logout_content')),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text(widget.t('cancel')),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            final FirebaseAuth auth = FirebaseAuth.instance;
-                            await auth.signOut();
-                            if (context.mounted) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const LoginPage()));
-                            }
-                          },
-                          child: Text(widget.t('yes')),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-              const Divider(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 15),
-                child: Text(
-                  widget.t('follow_us'),
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _socialMediaIcon(FontAwesomeIcons.facebook,
-                      "https://facebook.com", Color(0xFF1877F2)),
-                  _socialMediaIcon(FontAwesomeIcons.instagram,
-                      "https://instagram.com", Color(0xFFC13584)),
-                  _socialMediaIcon(FontAwesomeIcons.youtube,
-                      "https://youtube.com", Color(0xFFFF0000)),
-                  _socialMediaIcon(FontAwesomeIcons.twitter,
-                      "https://twitter.com", Color(0xFF1DA1F2)),
-                  _socialMediaIcon(
-                      FontAwesomeIcons.linkedin,
-                      "https://linkedin.com/in/prateek-chourasia-in",
-                      Color(0xFF0A66C2)),
-                ],
-              ),
-              Divider(), // Divider before the footer
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Column(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "© 2025 NextGen Soft Labs and Prateek.\nAll Rights Reserved.",
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "${widget.t('version')} $_appVersion",
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    )
+                    _socialMediaIcon(FontAwesomeIcons.facebook, "https://facebook.com", Color(0xFF1877F2)),
+                    _socialMediaIcon(FontAwesomeIcons.instagram, "https://instagram.com", Color(0xFFC13584)),
+                    _socialMediaIcon(FontAwesomeIcons.youtube, "https://youtube.com", Color(0xFFFF0000)),
+                    _socialMediaIcon(FontAwesomeIcons.twitter, "https://twitter.com", Color(0xFF1DA1F2)),
+                    _socialMediaIcon(FontAwesomeIcons.linkedin, "https://linkedin.com/in/prateek-chourasia-in", Color(0xFF0A66C2)),
                   ],
                 ),
-              ),
-            ]),
-          ),
-        ],
+                Divider(color: Color(0xFFE0F7FA), thickness: 1),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        " 2025 NextGen Soft Labs and Prateek.\nAll Rights Reserved.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black54),
+                      ),
+                      Text(
+                        "${widget.t('version')} $_appVersion",
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      )
+                    ],
+                  ),
+                ),
+              ]),
+            ),
+          ],
+        ),
       ),
     );
   }

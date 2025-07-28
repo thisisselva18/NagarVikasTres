@@ -15,6 +15,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../screen/done_screen.dart';
+import '../service/local_status_storage.dart';
 
 class SharedIssueForm extends StatefulWidget {
   final String issueType;
@@ -319,6 +320,15 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
         'media_type': isVideo ? 'video' : 'image',
         'timestamp': DateTime.now().toIso8601String(),
         'status': 'Pending',
+      });
+
+      // Save notification in local storage for admin
+      await LocalStatusStorage.saveAdminNotification({
+        'message': 'A new complaint (ID: ${ref.key}) has been submitted and is pending review.',
+        'timestamp': DateTime.now().toIso8601String(),
+        'complaint_id': ref.key,
+        'status': 'Pending',
+        'issue_type': widget.issueType,
       });
 
       await _notificationService.showComplaintSubmittedNotification(

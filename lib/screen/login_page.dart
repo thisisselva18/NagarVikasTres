@@ -8,6 +8,9 @@ import 'package:nagarvikas/screen/admin_dashboard.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../service/local_status_storage.dart';
+import '../service/notification_service.dart';
+
 // 🧩 Stateful widget for login page
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -78,6 +81,21 @@ class LoginPageState extends State<LoginPage> {
         await Future.delayed(Duration(milliseconds: 3000));
         _showAdminPinDialog(email);
       } else {
+
+        // 👉 Show local notifications if any, then navigate
+        final notifications = await LocalStatusStorage.getNotifications();
+        if (notifications.isNotEmpty) {
+          for (var i = 0; i < notifications.length; i++) {
+            final n = notifications[i];
+            await NotificationService().showNotification(
+              id: i + 100, // avoid collision with other IDs
+              title: 'Complaint Status Updated',
+              body: n['message'] ?? 'Your complaint status has changed.',
+              payload: n['complaint_id'] ?? '',
+            );
+          }
+          await LocalStatusStorage.clearNotifications();
+        }
         // 👉 Navigate to issue selection page for regular users
         if (mounted) {
           Navigator.pushReplacement(
@@ -136,8 +154,22 @@ class LoginPageState extends State<LoginPage> {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
                   await prefs.setBool("isAdmin", true);
+
                   if(!context.mounted) return;
                   Navigator.pop(context);
+                  final adminNotifications = await LocalStatusStorage.getAdminNotifications();
+                  if (adminNotifications.isNotEmpty) {
+                    for (var i = 0; i <adminNotifications.length; i++) {
+                      final n = adminNotifications[i];
+                      await NotificationService().showNotification(
+                        id: i + 500, // avoid collision with other IDs
+                        title: 'New Complaint Filed',
+                        body: n['message'] ?? 'A new complaint has been filed.',
+                        payload: n['complaint_id'] ?? '',
+                      );
+                    }
+                    await LocalStatusStorage.clearAdminNotifications();
+                  }
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => AdminDashboard()),
