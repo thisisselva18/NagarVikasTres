@@ -392,62 +392,74 @@ class _SharedIssueFormState extends State<SharedIssueForm> {
             ZoomIn(child: Image.asset(widget.imageAsset, height: 200)),
             const SizedBox(height: 20),
 
-            DropdownButtonFormField<String>(
-              value: _selectedState,
-              hint: const Text("Select the Wizarding Region"),
-              items: _states.keys
-                  .map((s) => DropdownMenuItem(value: s, child: Text(s)))
-                  .toList(),
-              onChanged: (value) => setState(() {
-                _selectedState = value;
-                _selectedCity = null;
-              }),
-              decoration:
-                  _inputDecoration("State", isFilled: _selectedState != null),
-            ),
-            const SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              value: _selectedCity,
-              hint: const Text("Select the Nearest Magical District"),
-              items: _selectedState != null
-                  ? _states[_selectedState]!
-                      .map((city) =>
-                          DropdownMenuItem(value: city, child: Text(city)))
-                      .toList()
-                  : [],
-              onChanged: (value) => setState(() => _selectedCity = value),
-              decoration:
-                  _inputDecoration("City", isFilled: _selectedCity != null),
-            ),
-            const SizedBox(height: 10),
-
-            TextField(
-              controller: _locationController,
-              decoration: _inputDecoration("Reveal the Secret Location",
-                      isFilled: _locationController.text.trim().isNotEmpty)
-                  .copyWith(
-                suffixIcon: IconButton(
-                    icon: const Icon(Icons.my_location),
-                    onPressed: _getCurrentLocation),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: DropdownButtonFormField<String>(
+                value: _selectedState,
+                hint: const Text("Select the Wizarding Region"),
+                items: _states.keys
+                    .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                    .toList(),
+                onChanged: (value) => setState(() {
+                  _selectedState = value;
+                  _selectedCity = null;
+                }),
+                decoration:
+                    _inputDecoration("State", isFilled: _selectedState != null),
               ),
             ),
             const SizedBox(height: 10),
-            TextField(
-              controller: _descriptionController,
-              maxLines: 3,
-              maxLength: 250,
-              buildCounter: (_,
-                      {required currentLength,
-                      required isFocused,
-                      maxLength}) =>
-                  null,
-              decoration: _inputDecoration(
-                      "Describe the Strange Occurence or Speak a spell",
-                      isFilled: _descriptionController.text.trim().isNotEmpty)
-                  .copyWith(
-                suffixIcon: IconButton(
-                  icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
-                  onPressed: _isListening ? _stopListening : _startListening,
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: DropdownButtonFormField<String>(
+                value: _selectedCity,
+                hint: const Text("Select the Nearest Magical District"),
+                items: _selectedState != null
+                    ? _states[_selectedState]!
+                        .map((city) =>
+                            DropdownMenuItem(value: city, child: Text(city)))
+                        .toList()
+                    : [],
+                onChanged: (value) => setState(() => _selectedCity = value),
+                decoration:
+                    _inputDecoration("City", isFilled: _selectedCity != null),
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: TextField(
+                controller: _locationController,
+                decoration: _inputDecoration("Reveal the Secret Location",
+                        isFilled: _locationController.text.trim().isNotEmpty)
+                    .copyWith(
+                  suffixIcon: IconButton(
+                      icon: const Icon(Icons.my_location),
+                      onPressed: _getCurrentLocation),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: TextField(
+                controller: _descriptionController,
+                maxLines: 3,
+                maxLength: 250,
+                buildCounter: (_,
+                        {required currentLength,
+                        required isFocused,
+                        maxLength}) =>
+                    null,
+                decoration: _inputDecoration(
+                        "Describe the Strange Occurence or Speak a spell",
+                        isFilled: _descriptionController.text.trim().isNotEmpty)
+                    .copyWith(
+                  suffixIcon: IconButton(
+                    icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
+                    onPressed: _isListening ? _stopListening : _startListening,
+                  ),
                 ),
               ),
             ),
