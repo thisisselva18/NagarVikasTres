@@ -22,6 +22,7 @@ Admin also has analytics dashboard where total complaints , pending complaints ,
 
 - [Getting Started](#getting-started)
 - [Features](#-features)
+- [Project Structure](#Project-Structure)
 - [Tech Stack](#-tech-stack)
 - [Preview](#preview)
 - [How to Contribute](#-how-to-contribute)
@@ -58,6 +59,71 @@ For help getting started with Flutter development, view the [online documentatio
 - 🔔 Local Notifications (Flutter Local Notifications / Awesome Notifications)  
 - 🎤 Voice-based complaint support (Dialogflow planned)  
 - 💬 In-app Discussion Forum
+
+---
+
+
+## 📁 Project Structure
+
+```bash
+NagarVikas/
+├── .github/ISSUE_TEMPLATE/     
+├── .vscode/                    
+├── NagarVikas.git/             
+├── android/                    
+│        ├── app/
+│        ├── gradle/wrapper/
+│        ├── .gitignore
+│        ├── build.gradle
+│        ├── gradle.properties
+│        └──  settings.gradle
+├── assets/                            
+├── functions/                      
+│        ├── index.js
+│        └── package.json
+├── ios/             
+├── lib/
+│     ├── components/
+│     ├── model/
+│     ├── screen/
+│     ├── service/
+│     ├── theme/
+│     ├── widgets/
+│     └── main.dart          
+├── linux/                        
+├── macos/                     
+├── test/
+│      └── widget_test.dart                  
+├── web/
+│      ├── icons/
+│      ├── favicon.png 
+│      ├── index.html   
+│      └── manifest.json         
+├── windows/                       
+├── .editorconfig              
+├── .firebaserc                 
+├── .gitignore                  
+├── .metadata                   
+├── CODE_OF_CONDUCT.md       
+├── LICENSE    
+├── LICENSE.md              
+├── PULL_REQUEST_TEMPLATE.md                  
+├── README.md                
+├── SECURITY.md                              
+├── analysis_options.yaml
+├── devtools_options.yaml
+├── firebase.json
+├── flutter
+├── pubspec.lock    
+├── pubspec.yaml          
+├── screenshot 2.jpg                     
+├── screenshot app 1.jpg                
+├── screenshot app 4.jpg    
+├── screenshot app 4.jpg                  
+└── web_entrypoint.dart                 
+          
+
+````
 
 ---
 
