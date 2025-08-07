@@ -17,6 +17,8 @@ import 'package:nagarvikas/screen/login_page.dart';
 import 'package:nagarvikas/screen/issue_selection.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../widgets/bottom_nav_bar.dart';
+
 // Register screen widget
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -154,7 +156,7 @@ class RegisterScreenState extends State<RegisterScreen> {
       if(mounted){
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => IssueSelectionPage()),
+          MaterialPageRoute(builder: (context) => BottomNavBar()),
         );
       }
     } on FirebaseAuthException catch (e) {

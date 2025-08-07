@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../service/local_status_storage.dart';
 import '../service/notification_service.dart';
+import '../widgets/bottom_nav_bar.dart';
 
 // 🧩 Stateful widget for login page
 class LoginPage extends StatefulWidget {
@@ -100,7 +101,7 @@ class LoginPageState extends State<LoginPage> {
         if (mounted) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => IssueSelectionPage()),
+            MaterialPageRoute(builder: (context) => BottomNavBar()),
           );
         }
       }
