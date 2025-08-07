@@ -290,10 +290,15 @@ class AdminDashboardState extends State<AdminDashboard> {
                 'Favorites',
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => FavoritesPage(favoriteComplaints: favoriteComplaints),
+              onTap: () async {
+                await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => FavoritesPage(
+                    favoriteComplaints: favoriteComplaints,
+                    onRemoveFavorite: _removeFavoriteFromDashboard,
+                  ),
                 ));
+                // Refresh the UI when returning from favorites page
+                setState(() {});
               },
             ),
             const Divider(thickness: 1),
@@ -340,117 +345,100 @@ class AdminDashboardState extends State<AdminDashboard> {
       ),
       backgroundColor: const Color(0xFFF0F9FF),
       appBar: AppBar(
-        titleTextStyle: TextStyle(
-            color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800),
+        toolbarHeight: 80,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF00BCD4),
+                Color(0xFF0097A7),
+              ],
+            ),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
               "Admin Dashboard",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.5,
+              ),
             ),
-            Text("Manage complaints & track issues",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                ))
+            const SizedBox(height: 2),
+            Text(
+              "Manage complaints & track issues",
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.9),
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ],
         ),
-        elevation: 10.0,
-        backgroundColor: const Color.fromARGB(255, 4, 204, 240),
-        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
-          // Add more icons here as needed
-          PopupMenuButton<String>(
-            icon: Icon(Icons.more_vert, color: Colors.white),
-            onSelected: (value) async {
-              if (value == 'logout') {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    title: Column(
-                      children: [
-                        Icon(Icons.logout_rounded,
-                            size: 40,
-                            color: const Color.fromARGB(255, 4, 204, 240)),
-                        SizedBox(height: 8),
-                        Text(
-                          "Confirm Logout",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          textAlign: TextAlign.center,
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            child: PopupMenuButton<String>(
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.more_vert_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              offset: const Offset(0, 50),
+              onSelected: (value) async {
+                if (value == 'logout') {
+                  _showLogoutDialog();
+                }
+              },
+              itemBuilder: (BuildContext context) => [
+                PopupMenuItem(
+                  value: 'logout',
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF00BCD4).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                      ],
-                    ),
-                    content: Text(
-                      "Are you sure you want to log out?",
-                      style: TextStyle(color: Colors.black87, fontSize: 14),
-                      textAlign: TextAlign.center,
-                    ),
-                    actionsAlignment: MainAxisAlignment.spaceEvenly,
-                    actions: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                          const Color.fromARGB(255, 4, 204, 240),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                        child: const Icon(
+                          Icons.logout_rounded,
+                          color: Color(0xFF00BCD4),
+                          size: 18,
                         ),
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Text("Cancel",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700)),
                       ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                          const Color.fromARGB(255, 4, 204, 240),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                      const SizedBox(width: 12),
+                      const Text(
+                        'Logout',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
                         ),
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                          await FirebaseAuth.instance.signOut();
-                          if (!context.mounted) return;
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const LoginPage()),
-                          );
-                        },
-                        child: Text("Logout",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700)),
                       ),
                     ],
                   ),
-                );
-              }
-              // Add other menu item handlers here (e.g., profile, settings, etc.)
-            },
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem(
-                value: 'logout',
-                child: Row(
-                  children: [
-                    Icon(Icons.logout_rounded,
-                        color: const Color.fromARGB(255, 4, 204, 240)),
-                    SizedBox(width: 8),
-                    Text('Logout'),
-                  ],
                 ),
-              ),
-              // Add more menu items here if you want
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -460,25 +448,77 @@ class AdminDashboardState extends State<AdminDashboard> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey[50],
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Colors.grey[200]!,
+                  width: 1,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  )
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.02),
+                    blurRadius: 1,
+                    offset: const Offset(0, 1),
+                  ),
                 ],
               ),
               child: TextField(
                 controller: searchController,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  hintText: "Search complaints...",
-                  border: InputBorder.none,
-                  contentPadding:
-                  EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF1A1A1A),
+                  height: 1.4,
                 ),
+                decoration: InputDecoration(
+                  prefixIcon: Container(
+                    padding: const EdgeInsets.all(12),
+                    child: Icon(
+                      Icons.search_rounded,
+                      color: Colors.grey[600],
+                      size: 22,
+                    ),
+                  ),
+                  suffixIcon: searchController.text.isNotEmpty
+                      ? Container(
+                    padding: const EdgeInsets.all(12),
+                    child: GestureDetector(
+                      onTap: () {
+                        searchController.clear();
+                        _searchComplaints('');
+                      },
+                      child: Icon(
+                        Icons.clear_rounded,
+                        color: Colors.grey[500],
+                        size: 20,
+                      ),
+                    ),
+                  )
+                      : null,
+                  hintText: "Search complaints...",
+                  hintStyle: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey[500],
+                    height: 1.4,
+                  ),
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
+                  isDense: false,
+                ),
+                cursorColor: const Color(0xFF4CAF50),
+                cursorWidth: 2,
+                cursorHeight: 20,
                 onChanged: _searchComplaints,
               ),
             ),
@@ -495,66 +535,12 @@ class AdminDashboardState extends State<AdminDashboard> {
                   final complaintId = complaint["id"] ?? complaint.hashCode.toString();
                   final isFavorite = favoriteComplaints.any((fav) =>
                   (fav["id"] ?? fav.hashCode.toString()) == complaintId);
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    elevation: 3,
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.all(12),
-                      leading: complaint["media_type"] == "image"
-                          ? ClipOval(
-                        child: Image.network(
-                          complaint["media_url"],
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.cover,
-                          errorBuilder:
-                              (context, error, stackTrace) =>
-                          const Icon(Icons.broken_image,
-                              size: 40),
-                        ),
-                      )
-                          : const CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.grey,
-                        child: Icon(Icons.videocam,
-                            color: Colors.white),
-                      ),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              complaint["issue_type"] ?? "Unknown",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              isFavorite ? Icons.favorite : Icons.favorite_border,
-                              color: isFavorite ? Colors.red : Colors.grey,
-                              size: 24,
-                            ),
-                            onPressed: () => _toggleFavorite(complaint),
-                            padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(),
-                          ),
-                        ],
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Status: ${complaint["status"]}"),
-                          const SizedBox(height: 4),
-                          Text(
-                              "City: ${complaint["city"]}, State: ${complaint["state"]}"),
-                        ],
-                      ),
-                      onTap: () => Navigator.of(context).push(
-                        _createSlideRoute(complaint),
-                      ),
+                  return ComplaintCard(
+                    complaint: complaint,
+                    isFavorite: isFavorite,
+                    onFavoriteToggle: () => _toggleFavorite(complaint),
+                    onTap: () => Navigator.of(context).push(
+                      _createSlideRoute(complaint),
                     ),
                   );
                 },
@@ -579,6 +565,22 @@ class AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
+  Color _getStatusColor(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'pending':
+        return const Color(0xFFFF9800);
+      case 'in progress':
+        return const Color(0xFF2196F3);
+      case 'resolved':
+      case 'completed':
+        return const Color(0xFF4CAF50);
+      case 'rejected':
+      case 'cancelled':
+        return const Color(0xFFE57373);
+      default:
+        return Colors.grey[600]!;
+    }
+  }
 
   List<Map<String, dynamic>> favoriteComplaints = [];
 
@@ -610,5 +612,225 @@ class AdminDashboardState extends State<AdminDashboard> {
         );
       }
     });
+  }
+
+  void _removeFavoriteFromDashboard(Map<String, dynamic> complaint) {
+    setState(() {
+      final complaintId = complaint["id"] ?? complaint.hashCode.toString();
+      favoriteComplaints.removeWhere((fav) =>
+      (fav["id"] ?? fav.hashCode.toString()) == complaintId);
+    });
+  }
+}
+
+
+
+class ComplaintCard extends StatelessWidget {
+  final Map<String, dynamic> complaint;
+  final bool isFavorite;
+  final VoidCallback? onFavoriteToggle;
+  final VoidCallback? onTap;
+
+  const ComplaintCard({
+    Key? key,
+    required this.complaint,
+    required this.isFavorite,
+    this.onFavoriteToggle,
+    this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.grey[200]!,
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 1,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap ?? () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ComplaintDetailPage(complaintId: complaint["id"]),
+            ),
+          ),
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                // Modern media preview
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.grey[100],
+                  ),
+                  child: complaint["media_type"] == "image"
+                      ? ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      complaint["media_url"],
+                      width: 56,
+                      height: 56,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(
+                              Icons.broken_image_rounded,
+                              color: Colors.grey[500],
+                              size: 24,
+                            ),
+                          ),
+                    ),
+                  )
+                      : Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue[50],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.videocam_rounded,
+                      color: Colors.blue[600],
+                      size: 24,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+
+                // Content section
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title and favorite row
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              complaint["issue_type"] ?? "Unknown Issue",
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF1A1A1A),
+                                height: 1.3,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          if (onFavoriteToggle != null)
+                            GestureDetector(
+                              onTap: onFavoriteToggle,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                child: Icon(
+                                  isFavorite
+                                      ? Icons.favorite_rounded
+                                      : Icons.favorite_border_rounded,
+                                  color: isFavorite
+                                      ? const Color(0xFFE57373)
+                                      : Colors.grey[400],
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+
+                      // Status badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: _getStatusColor(complaint["status"]).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          complaint["status"] ?? "Unknown",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: _getStatusColor(complaint["status"]),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+
+                      // Location info
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_rounded,
+                            size: 14,
+                            color: Colors.grey[500],
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              "${complaint["city"] ?? "Unknown"}, ${complaint["state"] ?? "Unknown"}",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey[600],
+                                height: 1.3,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Color _getStatusColor(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'pending':
+        return const Color(0xFFFF9800);
+      case 'in progress':
+        return const Color(0xFF2196F3);
+      case 'resolved':
+      case 'completed':
+        return const Color(0xFF4CAF50);
+      case 'rejected':
+      case 'cancelled':
+        return const Color(0xFFE57373);
+      default:
+        return Colors.grey[600]!;
+    }
   }
 }
