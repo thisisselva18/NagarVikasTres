@@ -128,7 +128,7 @@ class AuthCheckScreenState extends State<AuthCheckScreen> {
     });
 
     // ✅ Splash screen timer
-    Timer(const Duration(seconds: 9), () {
+    Timer(const Duration(seconds: 11), () {
       setState(() {
         _showSplash = false;
       });
