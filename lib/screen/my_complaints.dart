@@ -522,7 +522,6 @@ class MyComplaintsScreenState extends State<MyComplaintsScreen> {
     );
   }
 
-  // Add this helper method to your class
   String _getNoComplaintsMessage() {
     switch (selectedStatus) {
       case 'Pending':
