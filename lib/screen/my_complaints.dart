@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MyComplaintsScreen extends StatefulWidget {
   const MyComplaintsScreen({super.key});
@@ -249,7 +250,24 @@ class MyComplaintsScreenState extends State<MyComplaintsScreen> {
         backgroundColor: const Color.fromARGB(255, 4, 204, 240),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+        child: Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Column(
+            children: List.generate(5, (index) =>
+                Container(
+                  margin: EdgeInsets.all(10),
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+            ),
+          ),
+        ),
+      )
           : complaints.isEmpty
               ? Center(
                   child: Column(
